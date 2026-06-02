@@ -1,0 +1,6 @@
+{
+  "name": "Kaio Cesar Portfolio",
+  "description": "Website responsivo e interativo para a landing page e portfólio de Kaio Cesar (kaioodev).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
