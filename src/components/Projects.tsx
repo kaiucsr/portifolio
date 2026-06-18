@@ -5,7 +5,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ExternalLink, Github, ZoomIn, X } from 'lucide-react';
+import { ExternalLink, Github, ZoomIn, X, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ProjectItem } from '../types';
 import { projectsList } from '../data/projects';
@@ -18,44 +18,46 @@ export default function Projects({ isFullPage = false }: { isFullPage?: boolean 
 
 
   return (
-    <section id="projetos" className="relative px-6 py-24 md:px-12 xl:px-24">
+    <section id="projetos" className={`relative px-6 ${isFullPage ? 'pb-24 pt-4' : 'py-24'} md:px-12 xl:px-24`}>
       {/* Background neon light on the right */}
       <div className="absolute top-1/3 right-0 h-96 w-96 rounded-full bg-blue-500/5 blur-3xl -z-10" />
 
       <div className="mx-auto max-w-7xl">
         {!isFullPage && (
-          <div className="text-center md:text-left mb-16 max-w-xl">
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="text-xs font-semibold uppercase tracking-widest text-blue-400"
-            >
-              Portfólio Selecionado
-            </motion.span>
-            <motion.h2
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="mt-2 text-3xl font-black tracking-tight text-white md:text-4xl"
-            >
-              Últimos projetos e trabalhos
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="mt-4 text-sm text-zinc-400 leading-relaxed"
-            >
-              Uma galeria de projetos digitais sob medida, criados com foco na usabilidade, identidade de marca expressiva e alta performance web.
-            </motion.p>
+          <div className="mb-16 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-xl text-center md:text-left">
+              <motion.span
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                className="text-xs font-semibold uppercase tracking-widest text-blue-400"
+              >
+                Portfólio Selecionado
+              </motion.span>
+              <motion.h2
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="mt-2 text-3xl font-black tracking-tight text-white md:text-4xl"
+              >
+                Últimos projetos e trabalhos
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="mt-4 text-sm text-zinc-400 leading-relaxed"
+              >
+                Uma galeria de projetos digitais sob medida, criados com foco na usabilidade, identidade de marca expressiva e alta performance web.
+              </motion.p>
+            </div>
           </div>
         )}
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className={`grid grid-cols-1 gap-6 lg:gap-8 ${isFullPage ? 'md:grid-cols-2' : 'md:grid-cols-2 lg:grid-cols-3'}`}>
           {displayProjects.map((project, index) => (
             <motion.div
               key={project.id}
@@ -176,14 +178,27 @@ export default function Projects({ isFullPage = false }: { isFullPage?: boolean 
         </div>
 
         {!isFullPage && (
-          <div className="mt-16 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.25 }}
+            className="mt-10 flex justify-center"
+          >
             <Link
               to="/portfolio"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-8 py-4 text-sm font-bold text-white transition-all hover:bg-blue-600 hover:border-blue-500 hover:shadow-[0_0_20px_rgba(59,130,246,0.4)]"
+              className="
+                inline-flex w-full md:w-auto items-center justify-center gap-2 rounded-full
+                border border-white/10 bg-white/5 px-6 py-3
+                text-sm font-semibold text-white backdrop-blur-sm
+                transition-all duration-300
+                hover:border-blue-500/40 hover:bg-blue-500/10 hover:text-blue-100
+              "
             >
               Ver portfólio completo
+              <ArrowRight className="h-4 w-4" />
             </Link>
-          </div>
+          </motion.div>
         )}
       </div>
 

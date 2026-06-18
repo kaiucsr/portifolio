@@ -6,7 +6,6 @@
 import { motion } from 'motion/react';
 
 interface HeroProps {
-  onBudgetClick: () => void;
   onServicesClick: () => void;
 }
 
@@ -153,7 +152,10 @@ function RevealLine({ line, lineIndex }: RevealLineProps) {
   );
 }
 
-export default function Hero({ onBudgetClick, onServicesClick }: HeroProps) {
+export default function Hero({ onServicesClick }: HeroProps) {
+  const whatsappUrl =
+    'https://wa.me/5583999511523?text=Ol%C3%A1%2C%20Kaio%21%20Vi%20seu%20portf%C3%B3lio%20e%20quero%20fazer%20um%20or%C3%A7amento.';
+
   const titleLines: TitleLine[] = [
     {
       words: ['Soluções', 'digitais'],
@@ -236,11 +238,7 @@ export default function Hero({ onBudgetClick, onServicesClick }: HeroProps) {
             "
           >
             {titleLines.map((line, index) => (
-              <RevealLine
-                key={index}
-                line={line}
-                lineIndex={index}
-              />
+              <RevealLine key={index} line={line} lineIndex={index} />
             ))}
           </h1>
 
@@ -301,9 +299,11 @@ export default function Hero({ onBudgetClick, onServicesClick }: HeroProps) {
             }}
             className="mt-6 flex flex-wrap gap-3 md:mt-8 md:gap-4"
           >
-            <button
+            <a
               id="hero-budget-btn"
-              onClick={onBudgetClick}
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               className="
                 cursor-pointer rounded-lg bg-gradient-to-r from-blue-600 to-blue-500
                 px-6 py-3 text-[14px] font-semibold text-white
@@ -315,7 +315,7 @@ export default function Hero({ onBudgetClick, onServicesClick }: HeroProps) {
               "
             >
               Pedir orçamento
-            </button>
+            </a>
 
             <button
               id="hero-services-btn"

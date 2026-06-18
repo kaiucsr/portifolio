@@ -10,7 +10,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 interface NavbarProps {
   activeSection: string;
-  onBudgetClick: () => void;
 }
 
 function AnimatedLogo() {
@@ -77,11 +76,14 @@ function AnimatedLogo() {
   );
 }
 
-export default function Navbar({ activeSection, onBudgetClick }: NavbarProps) {
+export default function Navbar({ activeSection }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const whatsappUrl =
+    'https://wa.me/5583999511523?text=Ol%C3%A1%2C%20Kaio%21%20Vi%20seu%20portf%C3%B3lio%20e%20quero%20fazer%20um%20or%C3%A7amento.';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -95,6 +97,15 @@ export default function Navbar({ activeSection, onBudgetClick }: NavbarProps) {
   const handleNavClick = (e: MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
     setIsMobileMenuOpen(false);
+
+    if (targetId === 'inicio') {
+      if (location.pathname === '/') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        navigate('/');
+      }
+      return;
+    }
 
     if (location.pathname !== '/') {
       navigate('/', { state: { scrollTo: targetId } });
@@ -125,10 +136,11 @@ export default function Navbar({ activeSection, onBudgetClick }: NavbarProps) {
     <>
       <nav
         id="main-navbar"
-        className={`fixed left-0 right-0 top-0 z-40 transition-all duration-300 ${isScrolled
+        className={`fixed left-0 right-0 top-0 z-40 transition-all duration-300 ${
+          isScrolled
             ? 'border-b border-white/5 bg-black/70 py-4 shadow-lg backdrop-blur-md'
             : 'bg-transparent py-6'
-          }`}
+        }`}
       >
         <div className="w-full px-6 md:px-12 xl:px-24">
           <div className="grid grid-cols-[1fr_auto_1fr] items-center">
@@ -151,10 +163,11 @@ export default function Navbar({ activeSection, onBudgetClick }: NavbarProps) {
                   id={`nav-link-${item.id}`}
                   href={`#${item.id}`}
                   onClick={(e) => handleNavClick(e, item.id)}
-                  className={`relative text-sm font-medium transition-colors duration-200 hover:text-white ${activeSection === item.id
+                  className={`relative text-sm font-medium transition-colors duration-200 hover:text-white ${
+                    activeSection === item.id
                       ? 'font-semibold text-white'
                       : 'text-zinc-400'
-                    }`}
+                  }`}
                 >
                   {item.label}
 
@@ -175,13 +188,15 @@ export default function Navbar({ activeSection, onBudgetClick }: NavbarProps) {
 
             {/* CTA Nav button */}
             <div className="hidden justify-self-end md:block">
-              <button
+              <a
                 id="nav-budget-btn"
-                onClick={onBudgetClick}
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="cursor-pointer rounded-full border border-white/10 bg-white/5 px-5 py-2 text-xs font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:border-blue-500 hover:bg-blue-500/10 hover:shadow-[0_0_15px_rgba(59,130,246,0.2)] focus:outline-none"
               >
                 Orçamento
-              </button>
+              </a>
             </div>
 
             {/* Mobile Menu Trigger */}
@@ -218,10 +233,11 @@ export default function Navbar({ activeSection, onBudgetClick }: NavbarProps) {
                   id={`mobile-nav-link-${item.id}`}
                   href={`#${item.id}`}
                   onClick={(e) => handleNavClick(e, item.id)}
-                  className={`py-2 text-base font-semibold transition-colors ${activeSection === item.id
+                  className={`py-2 text-base font-semibold transition-colors ${
+                    activeSection === item.id
                       ? 'text-white'
                       : 'text-zinc-400 hover:text-zinc-200'
-                    }`}
+                  }`}
                 >
                   {item.label}
                 </a>
@@ -229,16 +245,16 @@ export default function Navbar({ activeSection, onBudgetClick }: NavbarProps) {
 
               <div className="my-2 h-px bg-white/5" />
 
-              <button
+              <a
                 id="mobile-nav-budget-btn"
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  onBudgetClick();
-                }}
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setIsMobileMenuOpen(false)}
                 className="flex w-full cursor-pointer items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
               >
                 Pedir orçamento
-              </button>
+              </a>
             </div>
           </motion.div>
         )}

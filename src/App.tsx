@@ -6,15 +6,14 @@
 import { useState, useEffect, useRef } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import ContactModal from './components/ContactModal';
 import Home from './pages/Home';
 import Portfolio from './pages/Portfolio';
+import ServicesPage from './pages/ServicesPage';
 
 export default function App() {
   const location = useLocation();
   const [activeSection, setActiveSection] = useState('inicio');
   const [isBackgroundBlurred, setIsBackgroundBlurred] = useState(false);
-  const [isBudgetModalOpen, setIsBudgetModalOpen] = useState(false);
 
   const backdropRef = useRef<HTMLDivElement | null>(null);
   const personRef = useRef<HTMLImageElement | null>(null);
@@ -30,6 +29,18 @@ export default function App() {
     const updateActiveSection = () => {
       const scrollPosition = window.scrollY;
       const isMobileOrTablet = window.innerWidth < 1024;
+
+      const pathname = window.location.pathname;
+
+      if (pathname === '/servicos') {
+        setActiveSection('servicos');
+        return;
+      }
+
+      if (pathname === '/portfolio') {
+        setActiveSection('projetos');
+        return;
+      }
 
       const viewportMiddle = scrollPosition + window.innerHeight * 0.38;
 
@@ -68,18 +79,25 @@ export default function App() {
     if (location.state && location.state.scrollTo) {
       setTimeout(() => {
         const el = document.getElementById(location.state.scrollTo);
+
         if (el) {
           const offset = 80;
           const offsetPosition = el.offsetTop - offset;
+
           window.scrollTo({
             top: offsetPosition,
             behavior: 'smooth',
           });
         }
       }, 100);
-      window.history.replaceState({}, document.title)
+
+      window.history.replaceState({}, document.title);
     } else {
       window.scrollTo(0, 0);
+      if (location.pathname === '/') {
+        setActiveSection('inicio');
+        setIsBackgroundBlurred(false);
+      }
     }
   }, [location.pathname, location.state]);
 
@@ -214,10 +232,7 @@ export default function App() {
         Usa imagem única pronta, sem kaio-recorte por cima.
       */}
       <picture className="pointer-events-none fixed inset-0 z-0 block h-screen w-screen overflow-hidden lg:hidden">
-        <source
-          media="(max-width: 767px)"
-          srcSet="/fundomobile.png"
-        />
+        <source media="(max-width: 767px)" srcSet="/fundomobile.png" />
 
         <source
           media="(min-width: 768px) and (max-width: 1023px)"
@@ -228,8 +243,9 @@ export default function App() {
           src="/fundomobile.png"
           alt=""
           aria-hidden="true"
-          className={`h-full w-full object-cover object-center transition-[filter,transform] duration-700 ease-out ${isHeroActive ? 'scale-100 blur-0' : 'scale-105 blur-md'
-            }`}
+          className={`h-full w-full object-cover object-center transition-[filter,transform] duration-700 ease-out ${
+            isHeroActive ? 'scale-100 blur-0' : 'scale-105 blur-md'
+          }`}
         />
       </picture>
 
@@ -237,8 +253,9 @@ export default function App() {
       <div
         ref={backdropRef}
         id="app-fixed-backdrop"
-        className={`fixed inset-0 z-0 hidden h-screen w-screen bg-cover bg-[position:52%_center] bg-no-repeat md:bg-center lg:block ${isHeroActive ? 'blur-0' : 'blur-md'
-          }`}
+        className={`fixed inset-0 z-0 hidden h-screen w-screen bg-cover bg-[position:52%_center] bg-no-repeat md:bg-center lg:block ${
+          isHeroActive ? 'blur-0' : 'blur-md'
+        }`}
         style={{
           backgroundImage: "url('/fundosemeu.png')",
           transform: 'translate3d(0px, 0px, 0) scale(1.006)',
@@ -256,8 +273,9 @@ export default function App() {
         src="/kaio-recorte.png"
         alt=""
         aria-hidden="true"
-        className={`pointer-events-none fixed inset-0 z-0 hidden h-screen w-screen object-cover object-[52%_center] md:object-center lg:block ${isHeroActive ? 'blur-0' : 'blur-md'
-          }`}
+        className={`pointer-events-none fixed inset-0 z-0 hidden h-screen w-screen object-cover object-[52%_center] md:object-center lg:block ${
+          isHeroActive ? 'blur-0' : 'blur-md'
+        }`}
         style={{
           transform: `
             perspective(2400px)
@@ -295,8 +313,9 @@ export default function App() {
       {/* Camada leve na Hero e mais escura nas outras seções */}
       <div
         id="app-soft-overlay"
-        className={`pointer-events-none fixed inset-0 z-0 transition-colors duration-700 ${isHeroActive ? 'bg-black/10' : 'bg-black/45'
-          }`}
+        className={`pointer-events-none fixed inset-0 z-0 transition-colors duration-700 ${
+          isHeroActive ? 'bg-black/10' : 'bg-black/45'
+        }`}
       />
 
       {/* Vinheta sutil nas bordas */}
@@ -307,29 +326,18 @@ export default function App() {
 
       {/* Conteúdo do site */}
       <div className="relative z-10">
-        <Navbar
-          activeSection={activeSection}
-          onBudgetClick={() => setIsBudgetModalOpen(true)}
-        />
+        <Navbar activeSection={activeSection} />
 
         <Routes>
-          <Route 
-            path="/" 
-            element={
-              <Home 
-                onBudgetClick={() => setIsBudgetModalOpen(true)} 
-                onServicesClick={handleServicesScrollClick} 
-              />
-            } 
+          <Route
+            path="/"
+            element={<Home onServicesClick={handleServicesScrollClick} />}
           />
+
           <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/servicos" element={<ServicesPage />} />
         </Routes>
       </div>
-
-      <ContactModal
-        isOpen={isBudgetModalOpen}
-        onClose={() => setIsBudgetModalOpen(false)}
-      />
     </div>
   );
 }
